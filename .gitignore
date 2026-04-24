@@ -258,3 +258,5 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,python,macos,windows
 
+data/processed/paris_official_data
+data/raw

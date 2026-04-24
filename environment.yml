@@ -1,6 +1,8 @@
-name: ENVNAME
+name: paris-bicycle-vote
 channels:
   - conda-forge
 dependencies:
   - pytest
   - pre-commit
+  - geopandas
+  - statsmodels

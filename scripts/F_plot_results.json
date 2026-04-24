@@ -1,0 +1,30 @@
+{
+    "party":["Left_wing_share", "Right_wing_share"],
+    "label":["Left-wing", "Right-wing"],
+    "color":["#E53935", "#1E88E5", "#8E24AA"],
+    "marker":["o", "s", "o"],
+    "cmap":"RdYlGn",
+    "scheme":"fisher_jenks",
+    "alpha":[1, 1, 1],
+    "markersize":[10, 10, 10],
+    "figsize":[11.69, 8.27],
+    "rcparams":{
+        "font.size":10,
+        "font.family": "sans-serif",
+        "font.sans-serif": "Arial",
+        "axes.grid":"False",
+        "axes.spines.right": "False",
+        "axes.spines.top": "False",
+        "axes.axisbelow": "True",
+        "grid.color": "E1E1E1",
+        "xtick.bottom": "True",
+        "ytick.left": "True",
+        "figure.frameon": "False",
+        "figure.dpi": 400,
+        "savefig.bbox": "tight",
+        "legend.loc": "upper right",
+        "legend.edgecolor": "white",
+        "legend.facecolor": "white",
+        "errorbar.capsize": 4
+    }
+}
