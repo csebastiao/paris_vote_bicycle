@@ -93,8 +93,12 @@ def main():
     gdf_condensed = gdf_condensed.drop(
         ["C21_ACTOCC15P_VELO", "C21_ACTOCC15P_VOIT", "C21_ACTOCC15P"], axis=1
     )
+    gdf_condensed["NUM_ARROND"] = gdf_condensed["CODE_IRIS"].apply(
+        lambda x: int(x[3:5])
+    )
     gdf_condensed.to_file(FOLDER_OUT + "paris_dem_iris_2021_condensed.gpkg")
     # Replace na values for columns in MET_LIST by the average values of the k nearest neighbors with values
+    gdf_condensed_filled = gdf_condensed.copy()
     gdf_condensed_na = gdf_condensed[gdf_condensed["median_income"].isna()]
     gdf_condensed_notna = gdf_condensed[gdf_condensed["median_income"].notna()]
     change_dict = {met: {} for met in MET_LIST}
@@ -108,9 +112,30 @@ def main():
                 W, gdf_iris_temp[met].fillna(0).values
             )[-1]
     for met in MET_LIST:
-        gdf_condensed[met] = gdf_condensed[met].fillna(change_dict[met])
-    gdf_condensed["median_income"] = gdf_condensed["median_income"].map(round)
-    gdf_condensed.to_file(FOLDER_OUT + "paris_dem_iris_2021_condensed_filledna.gpkg")
+        gdf_condensed_filled[met] = gdf_condensed_filled[met].fillna(change_dict[met])
+    gdf_condensed_filled["median_income"] = gdf_condensed_filled["median_income"].map(
+        round
+    )
+    gdf_condensed_filled.to_file(
+        FOLDER_OUT + "paris_dem_iris_2021_condensed_filledna.gpkg"
+    )
+    gdf_arr = gdf_condensed.copy()
+    col_to_wavg = ["median_income", "share_commuter_cyclist", "share_commuter_driver"]
+    for col in col_to_wavg:
+        gdf_arr[col] = gdf_arr[col] * gdf_arr["pop"]
+        gdf_arr["num_poly_" + col] = gdf_arr[col].apply(
+            lambda x: 1 if pd.notna(x) else 0
+        )
+    gdf_arr = gdf_arr.dissolve(
+        by="NUM_ARROND",
+        aggfunc={"pop": "sum"}
+        | {col: "mean" for col in col_to_wavg}
+        | {"num_poly_" + col: "sum" for col in col_to_wavg},
+    )
+    for col in col_to_wavg:
+        gdf_arr[col] = gdf_arr["num_poly_" + col] * gdf_arr[col] / gdf_arr["pop"]
+    gdf_arr = gdf_arr.drop(["num_poly_" + col for col in col_to_wavg], axis=1)
+    gdf_arr.to_file(FOLDER_OUT + "paris_dem_iris_2021_arr.gpkg")
 
 
 if __name__ == "__main__":
