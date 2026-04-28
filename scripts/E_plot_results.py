@@ -16,6 +16,8 @@ BINS_ARR = 4
 
 
 # TODO separate into multiple scripts and clean
+# TODO add plotting of planned length etc.
+# TODO add plotting of bicycle network
 def main():
     with open("./scripts/F_plot_results.json", "r") as f:
         plot_params = json.load(f)

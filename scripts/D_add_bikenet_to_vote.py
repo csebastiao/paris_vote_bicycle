@@ -8,16 +8,16 @@ import shapely
 import geopandas as gpd
 
 
-FOLDER_RAW = "./data/processed/paris_simplified_results/"
+FOLDER_RAW = "./data/raw/"
 FOLDER_OFFI = "./data/processed/paris_official_data/"
 FOLDER_OUT = "./data/processed/"
 
 
 def main():
-    # TODO bikenet loading correctly
-    gdf_bikenet = FOLDER_RAW
+    gdf_bikenet = gpd.read_file(FOLDER_RAW + "bikenet_paris_2026_01_28.json")
     gdf_vote_arr = gpd.read_file(FOLDER_OFFI + "paris_vote_arr_2020.gpkg")
-    gdf_vote_arr = gdf_vote_arr.to_crs(gdf_bikenet.crs)
+    gdf_vote_arr = gdf_vote_arr.to_crs(gdf_vote_arr.estimate_utm_crs())
+    gdf_bikenet = gdf_bikenet.to_crs(gdf_vote_arr.crs)
     gdf_vote_arr_res = add_length_to_poly(gdf_vote_arr, gdf_bikenet)
     gdf_vote_arr_res.to_file(FOLDER_OUT + "paris_vote_arr_2020_bikenet.gpkg")
 
@@ -26,19 +26,19 @@ def add_length_to_poly(gdf_poly, gdf_edges):
     gdf_poly_edges = gdf_poly.sjoin(gdf_edges, how="left", predicate="intersects")
     results_dict = {}
     for idx, row in gdf_poly_edges.iterrows():
-        if isinstance(row["built"], str):
+        if isinstance(row["Etat"], str):
             length = shapely.intersection(
                 row["geometry"],
-                gdf_edges.loc[row["u"], row["v"], row["key"]]["geometry"],
+                gdf_edges.loc[row["index_right"]]["geometry"],
             ).length
         else:
             length = 0
         planned = 0
         before = 0
         built = 0
-        if row["built"] == "No":
+        if row["Etat"] in ["Pas d'aménagement", "Provisoire ou coronapiste"]:
             planned += length
-        elif row["built"] == "2021-01-01":
+        elif row["Etat"] == "Réalisé Pré-2021":
             before += length
         else:
             planned += length
