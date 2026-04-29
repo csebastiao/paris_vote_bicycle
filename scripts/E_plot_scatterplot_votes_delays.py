@@ -27,7 +27,7 @@ def main():
         model = sm.OLS(
             gdf_vote["length_accomplished_share"],
             sm.add_constant(gdf_vote[column].values),
-        ).fit()
+        ).fit(cov_type="HC3")
         # Plot arrondissements
         fig, ax = plt.subplots(figsize=plot_params["figsize"])
         ax.scatter(
@@ -78,6 +78,14 @@ def main():
             label="Linear regression",
             linewidth=2,
             zorder=1,
+        )
+        # Add linear regression parameters
+        ax.text(
+            x=0.6,
+            y=0.85,
+            transform=ax.transAxes,
+            s=f"$R^2$={round(model.rsquared, 3)}, slope={round(model.params['x1'], 3)}, p-value={round(model.pvalues['x1'], 5)}",
+            fontsize=13,
         )
         ax.set_ylabel("Share of bicycle lanes accomplished")
         ax.set_xlabel(plot_params["xlabel"][idx])
