@@ -36,7 +36,7 @@ def main():
             kwargs = {}
         gdf.plot(ax=ax, column=column_name, cmap=cmap, legend=True, **kwargs)
         ax.axis("off")
-        fig.savefig(FOLDERPLOT + "Paris_" + column_name + ".png", dpi=DPI)
+        fig.savefig(FOLDERPLOT + "Paris_" + column_name + ".jpeg", dpi=DPI)
 
 
 if __name__ == "__main__":
