@@ -1,4 +1,4 @@
-name: paris-bicycle-vote
+name: paris_vote_bicycle
 channels:
   - conda-forge
 dependencies:
@@ -6,3 +6,4 @@ dependencies:
   - pre-commit
   - geopandas
   - statsmodels
+  - beautifulsoup4

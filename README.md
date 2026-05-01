@@ -1,10 +1,5 @@
 The purpose of this template is to be a foundation for creating a new research project, specifically for data/network science research in the [NERDS research group](https://nerds.itu.dk/) - but feel free to use it in any way. The template comes with a basic folder structure and a workflow adapted for programming using Python.
-
-⚠️ **Read [TEMPLATE.md](TEMPLATE.md) to know how to use the template** ⚠️
-
-***
-
-# PROJECTNAME
+# Paris bicycle plan and vote delays
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
@@ -17,12 +12,10 @@ This is the source code for the scientific paper/project [*PROJECTNAME*](PAPERUR
 [![PROJECTNAME](SPLASHIMAGE.JPG/PNG/GIF)](PROJECTURL)
 
 ## Installation
-To install and use the code, you need to have installed [JupyterLab](https://pypi.org/project/jupyterlab/).
-
 First clone the repository:
 
 ```
-git clone https://github.com/USER/REPO.git
+git clone https://github.com/csebastiao/paris_vote_bicycle.git
 ```
 
 Go to the cloned folder and create a new virtual environment. 
@@ -35,14 +28,6 @@ Installation with [`pixi`](https://pixi.prefix.dev/latest/) is fastest and most 
 pixi init --import environment.yml
 ```
 
-Now build the environment and run it:
-
-```
-pixi run jupyter lab
-```
-
-An instance of Jupyter lab is automatically going to open in your browser after the environment is built.
-
 ### Installation with pip/mamba/conda
 
 You can either create a new virtual environment then install the necessary dependencies with `pip` using the `requirements.txt` file:
@@ -51,20 +36,18 @@ You can either create a new virtual environment then install the necessary depen
 pip install -r requirements.txt
 ```
 
-Or create a new environment with the dependencies with `conda` or [`mamba`](https://mamba.readthedocs.io/en/latest/index.html) using the `environment.yml` file:
+Or create a new environment with the dependencies with `conda`/`mamba` using the `environment.yml` file:
 
 ```
-mamba env create -f environment.yml
+conda env create -f environment.yml
 ```
 Then, install the virtual environment's kernel in Jupyter:
 
 ```
-mamba activate ENVNAME
-ipython kernel install --user --name=ENVNAME
+conda activate paris_vote_bicycle
+ipython kernel install --user --name=paris_vote_bicycle
 mamba deactivate
 ```
-
-You can now run `jupyter lab` with kernel `ENVNAME` (Kernel > Change Kernel > ENVNAME).
 
 ## Repository structure
 

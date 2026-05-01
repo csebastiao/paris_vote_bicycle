@@ -6,7 +6,6 @@ Create processed IRIS data from raw files in Paris.
 import os
 import numpy as np
 import pandas as pd
-from libpysal import weights
 import geopandas as gpd
 
 FOLDER_IN = "./data/raw/official_data/"
@@ -59,7 +58,6 @@ def main():
     gdf_paris_iris = gdf_paris_iris.to_crs(epsg=4326)
     gdf_paris_iris = gdf_paris_iris.merge(df_iris_income, on="CODE_IRIS")
     gdf_paris_iris = gdf_paris_iris.merge(df_iris_activity, on="CODE_IRIS")
-    gdf_paris_iris.to_file(FOLDER_OUT + "paris_dem_iris_2021.gpkg")
     # Keep only relevant columns
     gdf_condensed = gdf_paris_iris[
         [
@@ -96,29 +94,7 @@ def main():
     gdf_condensed["NUM_ARROND"] = gdf_condensed["CODE_IRIS"].apply(
         lambda x: int(x[3:5])
     )
-    gdf_condensed.to_file(FOLDER_OUT + "paris_dem_iris_2021_condensed.gpkg")
-    # Replace na values for columns in MET_LIST by the average values of the k nearest neighbors with values
-    gdf_condensed_filled = gdf_condensed.copy()
-    gdf_condensed_na = gdf_condensed[gdf_condensed["median_income"].isna()]
-    gdf_condensed_notna = gdf_condensed[gdf_condensed["median_income"].notna()]
-    change_dict = {met: {} for met in MET_LIST}
-    for idx, row in gdf_condensed_na.iterrows():
-        gdf_iris_temp = gdf_condensed_notna.copy()
-        gdf_iris_temp.loc[-1] = row
-        W = weights.KNN.from_dataframe(gdf_iris_temp, use_index=True, k=8)
-        W.transform = "r"
-        for met in MET_LIST:
-            change_dict[met][idx] = weights.lag_spatial(
-                W, gdf_iris_temp[met].fillna(0).values
-            )[-1]
-    for met in MET_LIST:
-        gdf_condensed_filled[met] = gdf_condensed_filled[met].fillna(change_dict[met])
-    gdf_condensed_filled["median_income"] = gdf_condensed_filled["median_income"].map(
-        round
-    )
-    gdf_condensed_filled.to_file(
-        FOLDER_OUT + "paris_dem_iris_2021_condensed_filledna.gpkg"
-    )
+    gdf_condensed.to_file(FOLDER_OUT + "paris_dem_iris_2021.gpkg")
     gdf_arr = gdf_condensed.copy()
     # Merge arrondissement 1 to 4
     gdf_arr["NUM_ARROND"] = gdf_arr["NUM_ARROND"].apply(lambda x: x if x > 4 else 1)
