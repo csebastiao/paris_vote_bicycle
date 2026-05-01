@@ -50,7 +50,7 @@ def main():
                 zorder=2,
             )
             if numbered:
-                for i in range(20):
+                for i in range(len(gdf_vote)):
                     ax.annotate(
                         gdf_vote["NUM_ARROND"].values[i],
                         (

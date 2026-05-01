@@ -120,6 +120,9 @@ def main():
         FOLDER_OUT + "paris_dem_iris_2021_condensed_filledna.gpkg"
     )
     gdf_arr = gdf_condensed.copy()
+    # Merge arrondissement 1 to 4
+    gdf_arr["NUM_ARROND"] = gdf_arr["NUM_ARROND"].apply(lambda x: x if x > 4 else 1)
+    # Do weighted average by population
     col_to_wavg = ["median_income", "share_commuter_cyclist", "share_commuter_driver"]
     for col in col_to_wavg:
         gdf_arr[col] = gdf_arr[col] * gdf_arr["pop"]
