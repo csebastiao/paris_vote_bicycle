@@ -14,10 +14,13 @@ import statsmodels.api as sm
 
 FOLDEROOTS = "./data/processed/"
 FOLDERPLOT = "./plots/"
+INSET_NUMBER_SIZE = 7
+MAIN_NUMBER_SIZE = 12
 
 
-# TODO add number of arrondissement inside the choropleth map
 # TODO make scatter points look better
+# TODO make number look cooler
+# TODO Move 16, C, and 12 to better positions
 def main():
     with open("./scripts/F_plot_factor_delays.json", "r") as f:
         plot_params = json.load(f)
@@ -41,18 +44,85 @@ def main():
             color=plot_params["color"][idx],
             zorder=2,
         )
-        for i in range(len(gdf_arr)):
-            ax.annotate(
-                gdf_arr["NUM_ARROND"].values[i],
-                (
-                    gdf_arr[column].values[i],
-                    gdf_arr["length_accomplished_share"].values[i],
-                ),
-                fontweight="bold",
-                color="white",
-                ha="center",
-                va="center",
-            )
+        # Add arrondissement number for each dot
+        if column == "Right_wing_share":
+            for i in range(len(gdf_arr)):
+                if gdf_arr["NUM_ARROND"].values[i] == 1:
+                    ax.annotate(
+                        "C",
+                        (
+                            gdf_arr[column].values[i],
+                            gdf_arr["length_accomplished_share"].values[i],
+                        ),
+                        fontsize=MAIN_NUMBER_SIZE,
+                        fontweight=900,
+                        color="white",
+                        ha="center",
+                        va="center",
+                    )
+                elif gdf_arr["NUM_ARROND"].values[i] == 11:
+                    ax.annotate(
+                        gdf_arr["NUM_ARROND"].values[i],
+                        (
+                            gdf_arr[column].values[i],
+                            gdf_arr["length_accomplished_share"].values[i],
+                        ),
+                        textcoords="offset points",
+                        xytext=(22, -12),
+                        arrowprops=dict(arrowstyle="-"),
+                        fontweight=900,
+                        fontsize=MAIN_NUMBER_SIZE,
+                        color="black",
+                        ha="center",
+                        va="center",
+                    )
+                elif gdf_arr["NUM_ARROND"].values[i] == 19:
+                    ax.annotate(
+                        gdf_arr["NUM_ARROND"].values[i],
+                        (
+                            gdf_arr[column].values[i],
+                            gdf_arr["length_accomplished_share"].values[i],
+                        ),
+                        textcoords="offset points",
+                        xytext=(-22, 12),
+                        arrowprops=dict(arrowstyle="-"),
+                        fontweight=900,
+                        fontsize=MAIN_NUMBER_SIZE,
+                        color="black",
+                        ha="center",
+                        va="center",
+                    )
+                else:
+                    ax.annotate(
+                        gdf_arr["NUM_ARROND"].values[i],
+                        (
+                            gdf_arr[column].values[i],
+                            gdf_arr["length_accomplished_share"].values[i],
+                        ),
+                        fontweight=900,
+                        fontsize=MAIN_NUMBER_SIZE,
+                        color="white",
+                        ha="center",
+                        va="center",
+                    )
+        else:
+            for i in range(len(gdf_arr)):
+                if gdf_arr["NUM_ARROND"].values[i] == 1:
+                    text = "C"
+                else:
+                    text = gdf_arr["NUM_ARROND"].values[i]
+                ax.annotate(
+                    text,
+                    (
+                        gdf_arr[column].values[i],
+                        gdf_arr["length_accomplished_share"].values[i],
+                    ),
+                    fontweight=900,
+                    fontsize=MAIN_NUMBER_SIZE,
+                    color="white",
+                    ha="center",
+                    va="center",
+                )
         # Add expected value lines
         ax.plot(
             [-1, 99999],
@@ -89,13 +159,14 @@ def main():
         # Add as an inset the choropleth map of the factor
         cax = ax.inset_axes([plot_params["inset_x"][idx], 0.5, 0.5, 0.5])
         gcax = cax.inset_axes([0.82, 0.42, 0.03, 0.45])
+        vmax = plot_params["xlim"][idx][-1]
         kwargs = {
             "vmin": 0,
-            "vmax": 1,
+            "vmax": vmax,
             "legend_kwds": {
                 "cax": gcax,
                 "format": mtick.PercentFormatter(1),
-                "ticks": [0.0, 0.25, 0.5, 0.75, 1.0],
+                "ticks": [0, vmax / 2, vmax],
             },
         }
         cax.text(
@@ -125,10 +196,31 @@ def main():
                 "unit": "km",
                 "major_mult": 1,
                 "major_div": 3,
+                "tickwidth": 1,
+                "height": 0.06,
             },
-            labels={"style": "first_last"},
+            labels={"style": "first_last", "fontsize": INSET_NUMBER_SIZE, "sep": 1},
+            units={"fontsize": INSET_NUMBER_SIZE, "fontweight": "normal"},
         )
-        gcax.tick_params(labelsize=7)
+        gcax.tick_params(labelsize=INSET_NUMBER_SIZE)
+        # Add arrondissement number
+        rep_point = gdf_arr.geometry.representative_point()
+        arrs = gdf_arr["NUM_ARROND"].values
+        for i in range(len(gdf_arr)):
+            if arrs[i] == 1:
+                text = "C"
+            else:
+                text = arrs[i]
+            cax.text(
+                x=rep_point[i].xy[0][0],
+                y=rep_point[i].xy[1][0],
+                s=text,
+                color="white",
+                fontweight="bold",
+                ha="center",
+                va="center",
+                fontsize=MAIN_NUMBER_SIZE,
+            )
         cax.xaxis.set_major_locator(mtick.NullLocator())
         cax.yaxis.set_major_locator(mtick.NullLocator())
         fig.savefig(FOLDERPLOT + f"scatterplot_{column}.jpeg")

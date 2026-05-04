@@ -2,7 +2,7 @@
     "column":["Left_wing_share", "Right_wing_share"],
     "xlabel":["Left-wing share", "Right-wing share"],
     "color":["#E53935", "#1E88E5"],
-    "s":[180, 180],
+    "s":[290, 290],
     "xlim":[[0, 0.7], [0, 0.7]],
     "figsize":[11.69, 8.27],
     "inset_x":[0.03, 0.45],
@@ -10,7 +10,7 @@
     "colorbar_x":[0.828, 0.827],
     "colorbar_label":["L", "R"],
     "rcparams":{
-        "font.size":10,
+        "font.size":14,
         "font.family": "sans-serif",
         "font.sans-serif": "Arial",
         "axes.axisbelow": "True",

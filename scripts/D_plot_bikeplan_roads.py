@@ -27,6 +27,9 @@ STATE_COLOR = {
 DPI = 250
 
 
+# TODO add legend
+# TODO find better colors coherent with viridis
+# TODO move scale bar up and right
 def main():
     gdf_arr = gpd.read_file(FOLDER_ARR + "paris_vote_arr_2020_bikenet.gpkg")
     # Plot bicycle plan progress over arrondissement
