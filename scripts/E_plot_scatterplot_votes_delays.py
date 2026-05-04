@@ -14,7 +14,8 @@ FOLDEROOTS = "./data/processed/"
 FOLDERPLOT = "./plots/"
 
 
-# TODO add OLS results R2, slope, and p-value on the scatterplot?
+# TODO put number in center of dot in matplotlib and put only dot as markers
+# TODO put inset for Left and Right the choropleth maps
 def main():
     with open("./scripts/E_plot_scatterplot_votes_delays.json", "r") as f:
         plot_params = json.load(f)
