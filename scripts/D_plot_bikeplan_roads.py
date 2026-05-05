@@ -30,7 +30,7 @@ STATE_COLOR = {
 }
 NUMBER_SIZE = 10
 ARR_SIZE = 15
-DPI = 400
+DPI = 350
 
 
 def main():
@@ -47,7 +47,7 @@ def main():
         gdf_bikenet[gdf_bikenet["Etat"] == state].plot(
             ax=ax_f, color=color, linewidth=2, label=state
         )
-    ax_f.legend()
+    ax_f.legend(loc="upper left", frameon=False)
     gdf_arr.plot(ax=ax_f, color="black", edgecolor="white", linewidth=5)
     # Add scale bar
     scale_bar(
@@ -112,12 +112,12 @@ def main():
             yy = rep_point[i].xy[1][0] - 100
             text = arrs[i]
         elif arrs[i] == 12:
-            xx = rep_point[i].xy[0][0]
-            yy = rep_point[i].xy[1][0] - 100
+            xx = rep_point[i].xy[0][0] - 4000
+            yy = rep_point[i].xy[1][0] + 500
             text = arrs[i]
         elif arrs[i] == 13:
-            xx = rep_point[i].xy[0][0] - 2000
-            yy = rep_point[i].xy[1][0] + 100
+            xx = rep_point[i].xy[0][0] - 200
+            yy = rep_point[i].xy[1][0] - 100
             text = arrs[i]
         elif arrs[i] == 15:
             xx = rep_point[i].xy[0][0] - 100
@@ -128,7 +128,7 @@ def main():
             yy = rep_point[i].xy[1][0] + 300
             text = arrs[i]
         else:
-            xx = rep_point[i].xy[1][0]
+            xx = rep_point[i].xy[0][0]
             yy = rep_point[i].xy[1][0]
             text = arrs[i]
         ax_s.text(
@@ -142,7 +142,13 @@ def main():
             fontsize=ARR_SIZE,
         )
     ax_s.axis("off")
-    fig.savefig(FOLDERPLOT + "map_bikeplan.jpeg", dpi=DPI, bbox_inches="tight")
+    fig.savefig(
+        FOLDERPLOT + "map_bikeplan.jpeg",
+        format="jpeg",
+        dpi=DPI,
+        bbox_inches="tight",
+        pad_inches=0.0,
+    )
 
 
 # Source - https://stackoverflow.com/a/18926541

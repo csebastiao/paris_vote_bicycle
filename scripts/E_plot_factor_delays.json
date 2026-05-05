@@ -2,7 +2,7 @@
     "column":["Left_wing_share", "Right_wing_share"],
     "xlabel":["Left-wing share", "Right-wing share"],
     "color":["#E53935", "#1E88E5"],
-    "s":[290, 290],
+    "s":[240, 240],
     "xlim":[[0, 0.7], [0, 0.7]],
     "figsize":[11.69, 8.27],
     "inset_x":[0.03, 0.45],
@@ -14,11 +14,9 @@
         "font.family": "sans-serif",
         "font.sans-serif": "Arial",
         "axes.axisbelow": "True",
-        "grid.color": "E1E1E1",
         "xtick.bottom": "True",
         "ytick.left": "True",
         "figure.frameon": "False",
-        "figure.dpi": 400,
-        "savefig.bbox": "tight"
+        "figure.dpi": 400
     }
 }
