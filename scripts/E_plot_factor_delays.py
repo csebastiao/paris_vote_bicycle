@@ -26,7 +26,9 @@ def main():
     gdf_arr = gpd.read_file(FOLDEROOTS + "paris_vote_arr_2020_bikenet.gpkg")
     mean_acc = gdf_arr["length_accomplished_share"].mean()
     fig, axs = plt.subplots(
-        2, 2, sharey="row", figsize=plot_params["figsize"], height_ratios=[0.3, 0.7]
+        ncols=2,
+        sharey="all",
+        figsize=plot_params["figsize"],
     )
     for idx, column in enumerate(plot_params["column"]):
         # Estimate linear regression
@@ -35,8 +37,8 @@ def main():
             sm.add_constant(gdf_arr[column].values),
         ).fit(cov_type="HC3")
         # Plot arrondissements
-        axs[1][idx].spines[["right", "top"]].set_visible(False)
-        axs[1][idx].scatter(
+        axs[idx].spines[["right", "top"]].set_visible(False)
+        axs[idx].scatter(
             gdf_arr[column],
             gdf_arr["length_accomplished_share"],
             s=plot_params["s"][idx],
@@ -47,7 +49,7 @@ def main():
         if column == "Right_wing_share":
             for i in range(len(gdf_arr)):
                 if gdf_arr["NUM_ARROND"].values[i] == 1:
-                    axs[1][idx].annotate(
+                    axs[idx].annotate(
                         "C",
                         (
                             gdf_arr[column].values[i],
@@ -60,14 +62,14 @@ def main():
                         va="center",
                     )
                 elif gdf_arr["NUM_ARROND"].values[i] == 11:
-                    axs[1][idx].annotate(
+                    axs[idx].annotate(
                         gdf_arr["NUM_ARROND"].values[i],
                         (
                             gdf_arr[column].values[i],
                             gdf_arr["length_accomplished_share"].values[i],
                         ),
                         textcoords="offset points",
-                        xytext=(21, -18),
+                        xytext=(18, -15),
                         arrowprops=dict(arrowstyle="-"),
                         fontweight=900,
                         fontsize=MAIN_NUMBER_SIZE,
@@ -76,14 +78,14 @@ def main():
                         va="center",
                     )
                 elif gdf_arr["NUM_ARROND"].values[i] == 19:
-                    axs[1][idx].annotate(
+                    axs[idx].annotate(
                         gdf_arr["NUM_ARROND"].values[i],
                         (
                             gdf_arr[column].values[i],
                             gdf_arr["length_accomplished_share"].values[i],
                         ),
                         textcoords="offset points",
-                        xytext=(-22, 17),
+                        xytext=(-18, 15),
                         arrowprops=dict(arrowstyle="-"),
                         fontweight=900,
                         fontsize=MAIN_NUMBER_SIZE,
@@ -92,7 +94,7 @@ def main():
                         va="center",
                     )
                 else:
-                    axs[1][idx].annotate(
+                    axs[idx].annotate(
                         gdf_arr["NUM_ARROND"].values[i],
                         (
                             gdf_arr[column].values[i],
@@ -105,13 +107,13 @@ def main():
                         va="center",
                     )
         else:
-            axs[1][idx].set_ylabel("Share of bicycle lanes accomplished")
+            axs[idx].set_ylabel("Share of bicycle lanes accomplished")
             for i in range(len(gdf_arr)):
                 if gdf_arr["NUM_ARROND"].values[i] == 1:
                     text = "C"
                 else:
                     text = gdf_arr["NUM_ARROND"].values[i]
-                axs[1][idx].annotate(
+                axs[idx].annotate(
                     text,
                     (
                         gdf_arr[column].values[i],
@@ -124,18 +126,15 @@ def main():
                     va="center",
                 )
         # Add expected value lines
-        axs[1][idx].plot(
+        axs[idx].plot(
             [-1, 99999],
             [mean_acc, mean_acc],
             linestyle="dashed",
             color="#E1E1E1",
             zorder=0,
         )
-        if column != "ratio_LR":
-            mean_share = gdf_arr[column].mean()
-        else:
-            mean_share = 0
-        axs[1][idx].plot(
+        mean_share = gdf_arr[column].mean()
+        axs[idx].plot(
             [mean_share, mean_share],
             [0, 1],
             linestyle="dashed",
@@ -145,7 +144,7 @@ def main():
         xx = np.linspace(
             gdf_arr[column].min() - 0.05, gdf_arr[column].max() + 0.05, num=100
         )
-        axs[1][idx].plot(
+        axs[idx].plot(
             xx,
             model.params["x1"] * xx + model.params["const"],
             color="#000000",
@@ -153,12 +152,13 @@ def main():
             zorder=1,
         )
 
-        axs[1][idx].set_xlabel(plot_params["xlabel"][idx])
-        axs[1][idx].set_xlim(plot_params["xlim"][idx])
-        axs[1][idx].set_ylim([0, 1])
-        axs[1][idx].set_aspect("equal")
+        axs[idx].set_xlabel(plot_params["xlabel"][idx])
+        axs[idx].set_xlim(plot_params["xlim"][idx])
+        axs[idx].set_ylim([0, 1])
+        axs[idx].set_aspect("equal")
         # Add as an inset the choropleth map of the factor
-        gcax = axs[0][idx].inset_axes([0.82, 0.42, 0.03, 0.45])
+        cax = axs[idx].inset_axes([plot_params["inset_x"][idx], 0.65, 0.8, 0.4])
+        gcax = cax.inset_axes([0.82, 0.42, 0.03, 0.45])
         vmax = plot_params["xlim"][idx][-1]
         kwargs = {
             "vmin": 0,
@@ -169,17 +169,17 @@ def main():
                 "ticks": [0, vmax / 2, vmax],
             },
         }
-        axs[0][idx].text(
+        cax.text(
             x=0.835,
             y=0.91,
-            transform=axs[0][idx].transAxes,
+            transform=cax.transAxes,
             s=plot_params["colorbar_label"][idx],
             fontsize=10,
             va="center",
             ha="center",
         )
         gdf_arr.plot(
-            ax=axs[0][idx],
+            ax=cax,
             column=column,
             cmap=plot_params["cmap"][idx],
             legend=True,
@@ -189,8 +189,8 @@ def main():
         )
         if idx == 0:
             scale_bar(
-                axs[0][idx],
-                location="upper left",
+                cax,
+                location="lower left",
                 style="ticks",
                 bar={
                     "projection": gdf_arr.crs,
@@ -248,7 +248,7 @@ def main():
                 xx = rep_point[i].xy[0][0]
                 yy = rep_point[i].xy[1][0]
                 text = arrs[i]
-            axs[0][idx].text(
+            cax.text(
                 x=xx,
                 y=yy,
                 s=text,
@@ -258,8 +258,8 @@ def main():
                 va="center",
                 fontsize=MAIN_NUMBER_SIZE,
             )
-        axs[0][idx].axis("off")
-    fig.subplots_adjust(wspace=-0.45, hspace=0)
+        cax.axis("off")
+    fig.subplots_adjust(wspace=0.15)
     fig.savefig(FOLDERPLOT + "scatterplot_delays.jpeg", bbox_inches="tight")
 
 

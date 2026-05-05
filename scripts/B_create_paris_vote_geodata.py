@@ -116,19 +116,7 @@ def main():
         )
     gdf_paris_arr = gpd.read_file(FOLDER_OUT + "paris_dem_iris_2021_arr.gpkg")
     gdf_vote = gdf_paris_arr.merge(df_paris_vote_arr, on="NUM_ARROND")
-    gdf_vote = compute_left_right_vote_anomaly(gdf_vote)
     gdf_vote.to_file(FOLDER_OUT + "paris_vote_arr_2020.gpkg")
-
-
-def compute_left_right_vote_anomaly(gdf_vote):
-    rm = gdf_vote["Right_wing_share"].mean()
-    lm = gdf_vote["Left_wing_share"].mean()
-    vote_avg_ratio = rm - lm
-    print(vote_avg_ratio)
-    gdf_vote["ratio_LR"] = (
-        (gdf_vote["Right_wing"] - gdf_vote["Left_wing"]) / gdf_vote["NB_EXPRIM"]
-    ) - vote_avg_ratio
-    return gdf_vote
 
 
 def invert_first_last_names(name):
