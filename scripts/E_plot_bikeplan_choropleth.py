@@ -18,7 +18,8 @@ NUMBER_SIZE = 13
 # TODO move scale bar up and right
 # TODO make number look cooler
 # TODO rename the % acc
-# TODO Move 16, C, and 12 to better positions
+# TODO Move 16, C, and 12 to better positions (should I do all manually?)
+# TODO find better color scheme
 def main():
     gdf_arr = gpd.read_file(FOLDER_ARR + "paris_vote_arr_2020_bikenet.gpkg")
     fig, ax = plt.subplots(figsize=[11.69, 8.27], layout="tight")

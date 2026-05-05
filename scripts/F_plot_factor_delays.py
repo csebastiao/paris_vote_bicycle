@@ -20,7 +20,7 @@ MAIN_NUMBER_SIZE = 12
 
 # TODO make scatter points look better
 # TODO make number look cooler
-# TODO Move 16, C, and 12 to better positions
+# TODO Move 16, C, and 12 to better positions (should I do all manually?)
 def main():
     with open("./scripts/F_plot_factor_delays.json", "r") as f:
         plot_params = json.load(f)

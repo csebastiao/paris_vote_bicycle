@@ -5,7 +5,6 @@ Plot paris bicycle network plan progress with lines.
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from matplotlib_map_utils.core.scale_bar import scale_bar
 
 END_CMAP = 0.75
 FOLDER_ARR = "./data/processed/"
@@ -29,7 +28,6 @@ DPI = 250
 
 # TODO add legend
 # TODO find better colors coherent with viridis
-# TODO move scale bar up and right
 def main():
     gdf_arr = gpd.read_file(FOLDER_ARR + "paris_vote_arr_2020_bikenet.gpkg")
     # Plot bicycle plan progress over arrondissement
@@ -42,14 +40,6 @@ def main():
     gdf_bikenet.plot(ax=ax, color=gdf_bikenet["color"], linewidth=2)
     gdf_arr.plot(ax=ax, color="whitesmoke", edgecolor="white", linewidth=5)
     ax.axis("off")
-    scale_bar(
-        ax,
-        location="lower left",
-        style="ticks",
-        bar={"projection": gdf_arr.crs, "unit": "km", "major_mult": 1, "major_div": 3},
-        labels={"style": "first_last"},
-    )
-    ax.get_tightbbox()
     fig.savefig(FOLDERPLOT + "map_bikeplan_roads.jpeg", dpi=DPI)
 
 
