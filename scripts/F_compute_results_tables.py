@@ -15,9 +15,8 @@ CORR_COLS = [
     "median_income",
     "share_commuter_cyclist",
     "share_commuter_driver",
-    # Put last to exclude from linear regression table
     "length_before_2021_norm",
-    "length_accomplished_share",
+    "length_accomplished_share",  # Put last to exclude from linear regression table
 ]
 
 
@@ -25,7 +24,7 @@ def main():
     gdf_vote = gpd.read_file(FOLDEROOTS + "paris_vote_arr_2020_bikenet.gpkg")
     # Compute linear regression table
     lr_dict = {}
-    for column in CORR_COLS[:-2]:
+    for column in CORR_COLS[:-1]:
         if column == "median_income":
             gdf_vote[column] = (gdf_vote[column] - gdf_vote[column].min()) / (
                 gdf_vote[column].max() - gdf_vote[column].min()
