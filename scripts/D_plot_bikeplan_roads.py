@@ -13,6 +13,8 @@ import numpy as np
 FOLDER_ARR = "./data/processed/"
 FOLDER_BIKE = "./data/raw/"
 FOLDERPLOT = "./plots/"
+COLORMAP = "plasma"
+END_CMAP = 0.7
 STATE_MAP = {
     "Pas d'aménagement": "Not built yet",
     "Provisoire ou coronapiste": "Not built yet",
@@ -21,8 +23,6 @@ STATE_MAP = {
     "Hors Plan Vélo (Embellir)": "Built",
     "Annoncé réalisé": "Built",
 }
-COLORMAP = "plasma"
-END_CMAP = 0.7
 STATE_COLOR = {
     "Built before 2021": "#272727",
     "Not built yet": plt.get_cmap(COLORMAP)(0),

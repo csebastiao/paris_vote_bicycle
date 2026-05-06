@@ -21,17 +21,17 @@ CORR_COLS = [
 
 
 def main():
-    gdf_vote = gpd.read_file(FOLDEROOTS + "paris_vote_arr_2020_bikenet.gpkg")
+    gdf_arr = gpd.read_file(FOLDEROOTS + "paris_vote_arr_2020_bikenet.gpkg")
     # Compute linear regression table
     lr_dict = {}
     for column in CORR_COLS[:-1]:
         if column == "median_income":
-            gdf_vote[column] = (gdf_vote[column] - gdf_vote[column].min()) / (
-                gdf_vote[column].max() - gdf_vote[column].min()
+            gdf_arr[column] = (gdf_arr[column] - gdf_arr[column].min()) / (
+                gdf_arr[column].max() - gdf_arr[column].min()
             )
         model = sm.OLS(
-            gdf_vote["length_accomplished_share"],
-            sm.add_constant(gdf_vote[column].values),
+            gdf_arr["length_accomplished_share"],
+            sm.add_constant(gdf_arr[column].values),
         ).fit(cov_type="HC3")
         lr_dict[column] = [
             round(model.rsquared, 3),
@@ -49,7 +49,7 @@ def main():
     # Compute correlation matrix
     corr = [
         [
-            pearsonr(gdf_vote[CORR_COLS[i]], gdf_vote[CORR_COLS[j]])
+            pearsonr(gdf_arr[CORR_COLS[i]], gdf_arr[CORR_COLS[j]])
             for j in range(len(CORR_COLS))
         ]
         for i in range(len(CORR_COLS))

@@ -15,20 +15,11 @@ FOLDER_OUT = "./data/processed/"
 
 def main():
     gdf_bikenet = gpd.read_file(FOLDER_RAW + "bikenet_paris_2026_01_28.json")
-    gdf_vote_arr = gpd.read_file(FOLDER_OFFI + "paris_vote_arr_2020.gpkg")
-    gdf_vote_arr = gdf_vote_arr.to_crs(gdf_vote_arr.estimate_utm_crs())
-    gdf_bikenet = gdf_bikenet.to_crs(gdf_vote_arr.crs)
-    gdf_vote_arr_res = add_length_to_poly(gdf_vote_arr, gdf_bikenet)
-    print(
-        "Length planned:",
-        gdf_vote_arr_res["length_planned"].sum(),
-        "Length built:",
-        gdf_vote_arr_res["length_built"].sum(),
-        "Length accomplished:",
-        gdf_vote_arr_res["length_built"].sum()
-        / gdf_vote_arr_res["length_planned"].sum(),
-    )
-    gdf_vote_arr_res.to_file(FOLDER_OUT + "paris_vote_arr_2020_bikenet.gpkg")
+    gdf_arr = gpd.read_file(FOLDER_OFFI + "paris_vote_arr_2020.gpkg")
+    gdf_arr = gdf_arr.to_crs(gdf_arr.estimate_utm_crs())
+    gdf_bikenet = gdf_bikenet.to_crs(gdf_arr.crs)
+    gdf_arr_res = add_length_to_poly(gdf_arr, gdf_bikenet)
+    gdf_arr_res.to_file(FOLDER_OUT + "paris_vote_arr_2020_bikenet.gpkg")
 
 
 def add_length_to_poly(gdf_poly, gdf_edges):

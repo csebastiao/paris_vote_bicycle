@@ -113,9 +113,9 @@ def main():
         df_paris_vote_arr[col + "_share"] = (
             df_paris_vote_arr[col] / df_paris_vote_arr["NB_EXPRIM"]
         )
-    gdf_paris_arr = gpd.read_file(FOLDER_OUT + "paris_dem_iris_2021_arr.gpkg")
-    gdf_vote = gdf_paris_arr.merge(df_paris_vote_arr, on="NUM_ARROND")
-    gdf_vote.to_file(FOLDER_OUT + "paris_vote_arr_2020.gpkg")
+    gdf_arr = gpd.read_file(FOLDER_OUT + "paris_dem_iris_2021_arr.gpkg")
+    gdf_arr = gdf_arr.merge(df_paris_vote_arr, on="NUM_ARROND")
+    gdf_arr.to_file(FOLDER_OUT + "paris_vote_arr_2020.gpkg")
 
 
 def invert_first_last_names(name):

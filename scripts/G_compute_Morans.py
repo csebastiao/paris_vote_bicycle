@@ -21,14 +21,14 @@ MORAN_COLS = [
 
 
 def main():
-    gdf_vote = gpd.read_file(FOLDEROOTS + "paris_vote_arr_2020_bikenet.gpkg")
-    w = weights.Queen.from_dataframe(gdf_vote, use_index=False)
+    gdf_arr = gpd.read_file(FOLDEROOTS + "paris_vote_arr_2020_bikenet.gpkg")
+    w = weights.Queen.from_dataframe(gdf_arr, use_index=False)
     morans = [
-        (round(Moran(gdf_vote[col], w).I, 3), round(Moran(gdf_vote[col], w).p_sim, 5))
+        (round(Moran(gdf_arr[col], w).I, 3), round(Moran(gdf_arr[col], w).p_sim, 5))
         for col in MORAN_COLS
     ]
-    df_corr = pd.DataFrame(morans, index=MORAN_COLS, columns=["I", "pval"])
-    df_corr.to_json(FOLDEROOTS + "morans.json")
+    df_moran = pd.DataFrame(morans, index=MORAN_COLS, columns=["I", "pval"])
+    df_moran.to_json(FOLDEROOTS + "morans.json")
 
 
 if __name__ == "__main__":
