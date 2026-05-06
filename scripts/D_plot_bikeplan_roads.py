@@ -21,16 +21,17 @@ STATE_MAP = {
     "Hors Plan Vélo (Embellir)": "Built",
     "Annoncé réalisé": "Built",
 }
-COLORMAP = "viridis_r"
-END_CMAP = 0.66
+COLORMAP = "plasma"
+END_CMAP = 0.7
 STATE_COLOR = {
-    "Built before 2021": "silver",
+    "Built before 2021": "#272727",
     "Not built yet": plt.get_cmap(COLORMAP)(0),
     "Built": plt.get_cmap(COLORMAP)(END_CMAP),
 }
-NUMBER_SIZE = 10
-ARR_SIZE = 15
+NUMBER_SIZE = 9
+ARR_SIZE = 13
 DPI = 350
+LW_BOUNDARIES = 5
 
 
 def main():
@@ -44,18 +45,30 @@ def main():
     fig = plt.figure(figsize=[11.69, 8.27])
     ax_f = fig.add_axes((0, 0, 0.55, 1))
     for state, color in STATE_COLOR.items():
+        if state == "Built before 2021":
+            lw = 0.7
+            ls = "-"
+        else:
+            lw = 1.5
+            ls = "-"
         gdf_bikenet[gdf_bikenet["Etat"] == state].plot(
-            ax=ax_f, color=color, linewidth=2, label=state
+            ax=ax_f, color=color, linewidth=lw, linestyle=ls, label=state
         )
     ax_f.legend(loc="upper left", frameon=False)
-    gdf_arr.plot(ax=ax_f, color="black", edgecolor="white", linewidth=5)
+    gdf_arr.plot(ax=ax_f, color="white", edgecolor="#C6C4C4", linewidth=LW_BOUNDARIES)
     # Add scale bar
     scale_bar(
         ax_f,
         location="lower left",
         style="ticks",
-        bar={"projection": gdf_arr.crs, "unit": "km", "major_mult": 1, "major_div": 3},
-        labels={"style": "first_last", "fontsize": NUMBER_SIZE},
+        bar={
+            "projection": gdf_arr.crs,
+            "unit": "km",
+            "major_mult": 1,
+            "major_div": 3,
+            "height": 0.1,
+        },
+        labels={"style": "first_last", "fontsize": NUMBER_SIZE, "sep": 0.05},
     )
     ax_f.axis("off")
     # Plot choropleth map
@@ -77,7 +90,7 @@ def main():
         cmap=truncate_colormap(plt.get_cmap(COLORMAP), maxval=END_CMAP),
         legend=True,
         edgecolor="white",
-        linewidth=5,
+        linewidth=LW_BOUNDARIES,
         **kwargs,
     )
     # Label colormap

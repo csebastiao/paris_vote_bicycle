@@ -16,6 +16,8 @@ FOLDEROOTS = "./data/processed/"
 FOLDERPLOT = "./plots/"
 INSET_NUMBER_SIZE = 5
 MAIN_NUMBER_SIZE = 8
+XLIM = 0.7
+SIZE_DOTS = 200
 
 
 def main():
@@ -41,7 +43,7 @@ def main():
         axs[idx].scatter(
             gdf_arr[column],
             gdf_arr["length_accomplished_share"],
-            s=plot_params["s"][idx],
+            s=SIZE_DOTS,
             color=plot_params["color"][idx],
             zorder=2,
         )
@@ -153,20 +155,19 @@ def main():
         )
 
         axs[idx].set_xlabel(plot_params["xlabel"][idx])
-        axs[idx].set_xlim(plot_params["xlim"][idx])
+        axs[idx].set_xlim([0, XLIM])
         axs[idx].set_ylim([0, 1])
         axs[idx].set_aspect("equal")
         # Add as an inset the choropleth map of the factor
         cax = axs[idx].inset_axes([plot_params["inset_x"][idx], 0.65, 0.8, 0.4])
         gcax = cax.inset_axes([0.82, 0.42, 0.03, 0.45])
-        vmax = plot_params["xlim"][idx][-1]
         kwargs = {
             "vmin": 0,
-            "vmax": vmax,
+            "vmax": XLIM,
             "legend_kwds": {
                 "cax": gcax,
                 "format": mtick.PercentFormatter(1),
-                "ticks": [0, vmax / 2, vmax],
+                "ticks": [0, XLIM / 2, XLIM],
             },
         }
         cax.text(
@@ -260,7 +261,7 @@ def main():
             )
         cax.axis("off")
     fig.subplots_adjust(wspace=0.15)
-    fig.savefig(FOLDERPLOT + "scatterplot_delays.jpeg", bbox_inches="tight")
+    fig.savefig(FOLDERPLOT + "scatterplot_delays_inset.jpeg", bbox_inches="tight")
 
 
 if __name__ == "__main__":

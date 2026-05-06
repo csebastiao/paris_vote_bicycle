@@ -1,11 +1,9 @@
 {
     "column":["Left_wing_share", "Right_wing_share"],
-    "xlabel":["Left-wing share", "Right-wing share"],
+    "xlabel":["Left-wing votes $L$", "Right-wing votes $R$"],
     "color":["#E53935", "#1E88E5"],
-    "s":[200, 200],
-    "xlim":[[0, 0.7], [0, 0.7]],
     "figsize":[11.69, 8.27],
-    "inset_x":[0.03, 0.25],
+    "inset_x":[0.03, 0.22],
     "cmap":["Reds", "Blues"],
     "colorbar_x":[0.828, 0.827],
     "colorbar_label":["L", "R"],
