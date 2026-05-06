@@ -6,6 +6,7 @@ Compute correlation and linear regression results table.
 import pandas as pd
 import geopandas as gpd
 import statsmodels.api as sm
+from scipy.stats import pearsonr
 
 FOLDEROOTS = "./data/processed/"
 CORR_COLS = [
@@ -47,7 +48,14 @@ def main():
     )
     df_lr.to_json(FOLDEROOTS + "linear_regression_results.json")
     # Compute correlation matrix
-    df_corr = gdf_vote[CORR_COLS].corr()
+    corr = [
+        [
+            pearsonr(gdf_vote[CORR_COLS[i]], gdf_vote[CORR_COLS[j]])
+            for j in range(len(CORR_COLS))
+        ]
+        for i in range(len(CORR_COLS))
+    ]
+    df_corr = pd.DataFrame(corr, index=CORR_COLS, columns=CORR_COLS)
     df_corr.to_json(FOLDEROOTS + "correlation_matrix.json")
 
 
