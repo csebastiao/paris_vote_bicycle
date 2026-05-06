@@ -54,7 +54,6 @@ ALIGNMENT_NUANCES_2020 = {
 }
 
 
-# TODO make version of arrondissements without the forests
 def main():
     if not os.path.exists(FOLDER_OUT):
         os.makedirs(FOLDER_OUT)
