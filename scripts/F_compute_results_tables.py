@@ -35,11 +35,11 @@ def main():
             sm.add_constant(gdf_vote[column].values),
         ).fit(cov_type="HC3")
         lr_dict[column] = [
-            model.rsquared,
-            model.params["x1"],
-            model.pvalues["x1"],
-            model.params["const"],
-            model.pvalues["const"],
+            round(model.rsquared, 3),
+            round(model.params["x1"], 3),
+            round(model.pvalues["x1"], 5),
+            round(model.params["const"], 3),
+            round(model.pvalues["const"], 5),
         ]
     df_lr = pd.DataFrame.from_dict(
         lr_dict,
@@ -56,6 +56,7 @@ def main():
         for i in range(len(CORR_COLS))
     ]
     df_corr = pd.DataFrame(corr, index=CORR_COLS, columns=CORR_COLS)
+    df_corr = df_corr.map(lambda x: (round(x[0], 3), round(x[1], 5)))
     df_corr.to_json(FOLDEROOTS + "correlation_matrix.json")
 
 
