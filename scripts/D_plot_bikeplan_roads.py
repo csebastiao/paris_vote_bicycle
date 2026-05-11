@@ -46,13 +46,11 @@ def main():
     ax_f = fig.add_axes((0, 0, 0.55, 1))
     for state, color in STATE_COLOR.items():
         if state == "Built before 2021":
-            lw = 0.7
-            ls = "-"
+            lw = 0.6
         else:
-            lw = 1.5
-            ls = "-"
+            lw = 2.1
         gdf_bikenet[gdf_bikenet["Etat"] == state].plot(
-            ax=ax_f, color=color, linewidth=lw, linestyle=ls, label=state
+            ax=ax_f, color=color, linewidth=lw, linestyle="-", label=state
         )
     ax_f.legend(loc="upper left", frameon=False)
     gdf_arr.plot(ax=ax_f, color="white", edgecolor="#C6C4C4", linewidth=LW_BOUNDARIES)

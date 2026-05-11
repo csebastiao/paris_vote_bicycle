@@ -36,9 +36,9 @@ def main():
         lr_dict[column] = [
             round(model.rsquared, 3),
             round(model.params["x1"], 3),
-            round(model.pvalues["x1"], 5),
+            round(model.pvalues["x1"], 9),
             round(model.params["const"], 3),
-            round(model.pvalues["const"], 5),
+            round(model.pvalues["const"], 9),
         ]
     df_lr = pd.DataFrame.from_dict(
         lr_dict,
@@ -55,7 +55,7 @@ def main():
         for i in range(len(CORR_COLS))
     ]
     df_corr = pd.DataFrame(corr, index=CORR_COLS, columns=CORR_COLS)
-    df_corr = df_corr.map(lambda x: (round(x[0], 3), round(x[1], 5)))
+    df_corr = df_corr.map(lambda x: (round(x[0], 3), round(x[1], 9)))
     df_corr.to_json(FOLDEROOTS + "correlation_matrix.json")
 
 
