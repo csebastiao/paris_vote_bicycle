@@ -32,7 +32,7 @@ def main():
         model = sm.OLS(
             gdf_arr["length_accomplished_share"],
             sm.add_constant(gdf_arr[column].values),
-        ).fit(cov_type="HC3")
+        ).fit()
         lr_dict[column] = [
             round(model.rsquared, 3),
             round(model.params["x1"], 3),

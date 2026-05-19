@@ -40,6 +40,8 @@ def add_length_to_poly(gdf_poly, gdf_edges):
             planned += length
         elif row["Etat"] == "Réalisé Pré-2021":
             before += length
+        elif row["Etat"] == "Hors Plan Vélo (Embellir)":
+            pass
         else:
             planned += length
             built += length

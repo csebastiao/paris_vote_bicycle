@@ -20,7 +20,6 @@ STATE_MAP = {
     "Provisoire ou coronapiste": "Not built yet",
     "Réalisé Pré-2021": "Built before 2021",
     "Réalisé dans le Plan Vélo": "Built",
-    "Hors Plan Vélo (Embellir)": "Built",
     "Annoncé réalisé": "Built",
 }
 STATE_COLOR = {
@@ -40,6 +39,8 @@ def main():
     gdf_bikenet = gpd.read_file(FOLDER_BIKE + "bikenet_paris_2026_01_28.json")
     gdf_bikenet = gdf_bikenet.set_crs(epsg=4326)
     gdf_bikenet = gdf_bikenet.to_crs(gdf_arr.crs)
+    # Remove lanes outside of Plan Vélo
+    gdf_bikenet = gdf_bikenet[gdf_bikenet["Etat"] != "Hors Plan Vélo (Embellir)"]
     gdf_bikenet["Etat"] = gdf_bikenet["Etat"].map(STATE_MAP)
     gdf_bikenet["color"] = gdf_bikenet["Etat"].map(STATE_COLOR)
     fig = plt.figure(figsize=[11.69, 8.27])
@@ -96,7 +97,7 @@ def main():
         x=0.835,
         y=0.91,
         transform=ax_s.transAxes,
-        s="N",
+        s="A",
         fontsize=ARR_SIZE,
         ha="center",
         va="center",

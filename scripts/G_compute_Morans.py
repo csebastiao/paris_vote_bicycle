@@ -25,7 +25,7 @@ def main():
     morans = [
         (
             round(Moran(gdf_arr[col], w).I, 3),
-            round(Moran(gdf_arr[col], w, permutations=50000).p_sim, 5),
+            round(Moran(gdf_arr[col], w).p_sim, 5),
         )
         for col in MORAN_COLS
     ]
