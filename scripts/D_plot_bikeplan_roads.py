@@ -44,7 +44,7 @@ def main():
     gdf_bikenet["Etat"] = gdf_bikenet["Etat"].map(STATE_MAP)
     gdf_bikenet["color"] = gdf_bikenet["Etat"].map(STATE_COLOR)
     fig = plt.figure(figsize=[11.69, 8.27])
-    ax_f = fig.add_axes((0, 0, 0.55, 1))
+    ax_f = fig.add_axes((0, 0, 0.535, 1))
     for state, color in STATE_COLOR.items():
         if state == "Built before 2021":
             lw = 0.6
@@ -71,7 +71,7 @@ def main():
     )
     ax_f.axis("off")
     # Plot choropleth map
-    ax_s = fig.add_axes((0.45, 0, 0.55, 1))
+    ax_s = fig.add_axes((0.465, 0, 0.535, 1))
     cax = ax_s.inset_axes([0.82, 0.42, 0.03, 0.45])
     kwargs = {
         "vmin": 0,

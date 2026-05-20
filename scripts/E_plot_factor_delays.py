@@ -65,38 +65,6 @@ def main():
                         ha="center",
                         va="center",
                     )
-                # elif gdf_arr["NUM_ARROND"].values[i] == 11:
-                #     axs[0][idx].annotate(
-                #         gdf_arr["NUM_ARROND"].values[i],
-                #         (
-                #             gdf_arr[column].values[i],
-                #             gdf_arr["length_accomplished_share"].values[i],
-                #         ),
-                #         textcoords="offset points",
-                #         xytext=(21, -18),
-                #         arrowprops=dict(arrowstyle="-"),
-                #         fontweight=900,
-                #         fontsize=MAIN_NUMBER_SIZE,
-                #         color="black",
-                #         ha="center",
-                #         va="center",
-                #     )
-                # elif gdf_arr["NUM_ARROND"].values[i] == 19:
-                #     axs[0][idx].annotate(
-                #         gdf_arr["NUM_ARROND"].values[i],
-                #         (
-                #             gdf_arr[column].values[i],
-                #             gdf_arr["length_accomplished_share"].values[i],
-                #         ),
-                #         textcoords="offset points",
-                #         xytext=(-22, 17),
-                #         arrowprops=dict(arrowstyle="-"),
-                #         fontweight=900,
-                #         fontsize=MAIN_NUMBER_SIZE,
-                #         color="black",
-                #         ha="center",
-                #         va="center",
-                #     )
                 else:
                     axs[0][idx].annotate(
                         gdf_arr["NUM_ARROND"].values[i],
@@ -111,7 +79,7 @@ def main():
                         va="center",
                     )
         else:
-            axs[0][idx].set_ylabel("Share of bicycle lanes accomplished $N$")
+            axs[0][idx].set_ylabel("Share of bicycle lanes accomplished $A$")
             for i in range(len(gdf_arr)):
                 if gdf_arr["NUM_ARROND"].values[i] == 1:
                     text = "C"
