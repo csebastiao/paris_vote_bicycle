@@ -13,6 +13,7 @@ CORR_COLS = [
     "Left_wing_share",
     "Right_wing_share",
     "median_income",
+    "mean_age",
     "share_commuter_cyclist",
     "share_commuter_driver",
     "length_before_2021_norm",
@@ -25,7 +26,7 @@ def main():
     # Compute linear regression table
     lr_dict = {}
     for column in CORR_COLS[:-1]:
-        if column == "median_income":
+        if column in ["median_income", "median_age"]:
             gdf_arr[column] = (gdf_arr[column] - gdf_arr[column].min()) / (
                 gdf_arr[column].max() - gdf_arr[column].min()
             )

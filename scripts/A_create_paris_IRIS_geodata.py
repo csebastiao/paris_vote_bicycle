@@ -10,11 +10,6 @@ import geopandas as gpd
 
 FOLDER_IN = "./data/raw/official_data/"
 FOLDER_OUT = "./data/processed/paris_official_data/"
-MET_LIST = [
-    "median_income",
-    "share_commuter_cyclist",
-    "share_commuter_driver",
-]
 
 
 def main():
@@ -64,6 +59,16 @@ def main():
             "CODE_IRIS",
             "P21_POP",
             "pop_density",
+            "P21_POP0002",
+            "P21_POP0305",
+            "P21_POP0610",
+            "P21_POP1117",
+            "P21_POP1824",
+            "P21_POP2539",
+            "P21_POP4054",
+            "P21_POP5564_x",  # Because 2 similar columns found while merging all iris data
+            "P21_POP6579",
+            "P21_POP80P",
             "C21_ACTOCC15P",
             "C21_ACTOCC15P_VELO",
             "C21_ACTOCC15P_VOIT",
@@ -71,6 +76,10 @@ def main():
             "geometry",
         ]
     ]
+    gdf_condensed["mean_age"] = gdf_condensed.apply(
+        get_mean_age,
+        axis=1,
+    )
     # Clean string data with French decimal
     gdf_condensed["DISP_MED21"] = gdf_condensed["DISP_MED21"].apply(
         lambda x: np.nan if "n" in x else int(float(x.replace(",", ".")))
@@ -89,7 +98,22 @@ def main():
         axis=1,
     )
     gdf_condensed = gdf_condensed.drop(
-        ["C21_ACTOCC15P_VELO", "C21_ACTOCC15P_VOIT", "C21_ACTOCC15P"], axis=1
+        [
+            "C21_ACTOCC15P_VELO",
+            "C21_ACTOCC15P_VOIT",
+            "C21_ACTOCC15P",
+            "P21_POP0002",
+            "P21_POP0305",
+            "P21_POP0610",
+            "P21_POP1117",
+            "P21_POP1824",
+            "P21_POP2539",
+            "P21_POP4054",
+            "P21_POP5564_x",
+            "P21_POP6579",
+            "P21_POP80P",
+        ],
+        axis=1,
     )
     gdf_condensed["NUM_ARROND"] = gdf_condensed["CODE_IRIS"].apply(
         lambda x: int(x[3:5])
@@ -99,7 +123,12 @@ def main():
     # Merge arrondissement 1 to 4
     gdf_arr["NUM_ARROND"] = gdf_arr["NUM_ARROND"].apply(lambda x: x if x > 4 else 1)
     # Do weighted average by population
-    col_to_wavg = ["median_income", "share_commuter_cyclist", "share_commuter_driver"]
+    col_to_wavg = [
+        "median_income",
+        "mean_age",
+        "share_commuter_cyclist",
+        "share_commuter_driver",
+    ]
     for col in col_to_wavg:
         gdf_arr[col] = gdf_arr[col] * gdf_arr["pop"]
         gdf_arr["num_poly_" + col] = gdf_arr[col].apply(
@@ -115,6 +144,36 @@ def main():
         gdf_arr[col] = gdf_arr["num_poly_" + col] * gdf_arr[col] / gdf_arr["pop"]
     gdf_arr = gdf_arr.drop(["num_poly_" + col for col in col_to_wavg], axis=1)
     gdf_arr.to_file(FOLDER_OUT + "paris_dem_iris_2021_arr.gpkg")
+
+
+def get_mean_age(df):
+    if pd.isna(df["P21_POP0002"]):
+        return np.nan
+    return np.median(
+        df["P21_POP0002"] * 1
+        + df["P21_POP0305"] * 4
+        + df["P21_POP0610"] * 8
+        + df["P21_POP1117"] * 14
+        + df["P21_POP1824"] * 21
+        + df["P21_POP2539"] * 32
+        + df["P21_POP4054"] * 47
+        + df["P21_POP5564_x"] * 59
+        + df["P21_POP6579"] * 72
+        + df["P21_POP80P"] * 85
+    ) / sum(
+        [
+            df["P21_POP0002"],
+            df["P21_POP0305"],
+            df["P21_POP0610"],
+            df["P21_POP1117"],
+            df["P21_POP1824"],
+            df["P21_POP2539"],
+            df["P21_POP4054"],
+            df["P21_POP5564_x"],
+            df["P21_POP6579"],
+        ],
+        df["P21_POP80P"],
+    )
 
 
 if __name__ == "__main__":

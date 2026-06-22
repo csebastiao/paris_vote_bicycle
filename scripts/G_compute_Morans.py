@@ -13,6 +13,7 @@ MORAN_COLS = [
     "Left_wing_share",
     "Right_wing_share",
     "median_income",
+    "mean_age",
     "share_commuter_cyclist",
     "share_commuter_driver",
     "length_accomplished_share",
