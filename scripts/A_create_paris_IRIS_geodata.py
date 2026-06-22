@@ -147,9 +147,26 @@ def main():
 
 
 def get_mean_age(df):
-    if pd.isna(df["P21_POP0002"]):
+    if (
+        pd.isna(df["P21_POP0002"])
+        or sum(
+            [
+                df["P21_POP0002"],
+                df["P21_POP0305"],
+                df["P21_POP0610"],
+                df["P21_POP1117"],
+                df["P21_POP1824"],
+                df["P21_POP2539"],
+                df["P21_POP4054"],
+                df["P21_POP5564_x"],
+                df["P21_POP6579"],
+                df["P21_POP80P"],
+            ]
+        )
+        == 0
+    ):
         return np.nan
-    return np.median(
+    return (
         df["P21_POP0002"] * 1
         + df["P21_POP0305"] * 4
         + df["P21_POP0610"] * 8
@@ -171,8 +188,8 @@ def get_mean_age(df):
             df["P21_POP4054"],
             df["P21_POP5564_x"],
             df["P21_POP6579"],
+            df["P21_POP80P"],
         ],
-        df["P21_POP80P"],
     )
 
 
