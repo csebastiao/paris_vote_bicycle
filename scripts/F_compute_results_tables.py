@@ -26,7 +26,7 @@ def main():
     # Compute linear regression table
     lr_dict = {}
     for column in CORR_COLS[:-1]:
-        if column in ["median_income", "median_age"]:
+        if column in ["median_income", "mean_age"]:
             gdf_arr[column] = (gdf_arr[column] - gdf_arr[column].min()) / (
                 gdf_arr[column].max() - gdf_arr[column].min()
             )
