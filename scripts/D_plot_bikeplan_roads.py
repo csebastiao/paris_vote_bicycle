@@ -97,7 +97,7 @@ def main():
         x=0.835,
         y=0.91,
         transform=ax_s.transAxes,
-        s="A",
+        s="$B$",
         fontsize=ARR_SIZE,
         ha="center",
         va="center",

@@ -79,7 +79,7 @@ def main():
                         va="center",
                     )
         else:
-            axs[0][idx].set_ylabel("Share of bicycle lanes accomplished $A$")
+            axs[0][idx].set_ylabel("Share of bicycle lanes built $B$")
             for i in range(len(gdf_arr)):
                 if gdf_arr["NUM_ARROND"].values[i] == 1:
                     text = "C"
